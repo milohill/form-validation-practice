@@ -7,18 +7,41 @@
   </head>
   <body>
     <form>
-      <label for="email">Email: </label>
-      <input type="email" />
+      <ul>
+        <li>
+          <label for="email">Email</label>
+          <input type="email" required />
+        </li>
+        <li>
+          <label for="country">Country</label>
+          <select required>
+            <option value="">--Please choose a country--</option>
+            <option value="ca">Canada</option>
+            <option value="us">United States</option>
+            <option value="jp">Japan</option>
+          </select>
+        </li>
+        <li>
+          <label for="zipcode">Postal Code</label>
+          <input type="text" required />
+        </li>
+      </ul>
       <button>Submit</button>
     </form>
   </body>
   <script>
     const form = document.querySelector('form');
     const email = document.querySelector('input[type=email]');
+    const country = document.querySelector('select');
+    let pattern = '';
+    const postalCode = document.querySelector('input[type=text]');
+    const constraints = {
+      ca: '^[A-Z][0-9][A-Z]\\s[0-9][A-Z][0-9]$',
+      us: '^[0-9]{5}$|^[0-9]{5}-[0-9]{4}$',
+      jp: '^[0-9]{3}-[0-9]{4}$',
+    };
 
-    email.addEventListener('input', () => {
-      validateEmail();
-    });
+    email.addEventListener('input', validateEmail);
 
     function validateEmail() {
       if (email.validity.typeMismatch) {
@@ -26,6 +49,26 @@
         email.reportValidity();
       } else {
         email.setCustomValidity('');
+      }
+    }
+
+    country.addEventListener('input', () => {
+      pattern = new RegExp(constraints[country.value], '');
+      console.log(pattern);
+    });
+
+    postalCode.addEventListener('input', validatePostalCode);
+
+    function validatePostalCode() {
+      // validate 'required'
+      if (country.validity.valueMissing) {
+        postalCode.setCustomValidity('Please select a country first');
+        postalCode.reportValidity();
+      }
+      // validate 'pattern'
+      if (!pattern.test(postalCode.value)) {
+        postalCode.setCustomValidity('Please enter a valid postal code');
+        postalCode.reportValidity();
       }
     }
   </script>
