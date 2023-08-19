@@ -5,5 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Form Validation Practice</title>
   </head>
-  <body></body>
+  <body>
+    <form>
+      <label for="email">Email: </label>
+      <input type="email" />
+      <button>Submit</button>
+    </form>
+  </body>
+  <script>
+    const form = document.querySelector('form');
+    const email = document.querySelector('input[type=email]');
+
+    email.addEventListener('input', () => {
+      validateEmail();
+    });
+
+    function validateEmail() {
+      if (email.validity.typeMismatch) {
+        email.setCustomValidity('Please enter a valid email address.');
+        email.reportValidity();
+      } else {
+        email.setCustomValidity('');
+      }
+    }
+  </script>
 </html>
