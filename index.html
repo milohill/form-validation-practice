@@ -25,6 +25,17 @@
           <label for="zipcode">Postal Code</label>
           <input type="text" required />
         </li>
+        <li>
+          <label for="password">Password</label>
+          <input type="password" class="password" minlength="8" />
+          <button
+            class="password-toggle"
+            type="button"
+            onclick="togglePasswordVisibility()"
+          >
+            Toggle Password
+          </button>
+        </li>
       </ul>
       <button>Submit</button>
     </form>
@@ -40,6 +51,8 @@
       us: '^[0-9]{5}$|^[0-9]{5}-[0-9]{4}$',
       jp: '^[0-9]{3}-[0-9]{4}$',
     };
+    const password = document.querySelector('.password');
+    const passwordToggleButton = document.querySelector('.password-toggle');
 
     email.addEventListener('input', validateEmail);
 
@@ -69,6 +82,26 @@
       if (!pattern.test(postalCode.value)) {
         postalCode.setCustomValidity('Please enter a valid postal code');
         postalCode.reportValidity();
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const type =
+        password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+    }
+
+    password.addEventListener('input', validatePassword);
+
+    function validatePassword() {
+      const isValid = password.validity.tooShort;
+      if (isValid) {
+        password.setCustomValidity(
+          'Please enter a password more than 8 characters.'
+        );
+        password.reportValidity();
+      } else {
+        password.setCustomValidity('');
       }
     }
   </script>
